@@ -18,6 +18,7 @@
 
 use core::slice;
 use linked_hash_map::LinkedHashMap as HashMap;
+use rand::{Rng, rngs};
 
 #[derive(Debug)]
 pub enum Error {
@@ -27,6 +28,12 @@ pub enum Error {
 
 #[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Var(pub char);
+
+impl PartialEq<char> for Var {
+    fn eq(&self, other: &char) -> bool {
+        self.0 == *other
+    }
+}
 
 impl std::fmt::Display for Var {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -187,10 +194,16 @@ pub struct Vm<'a> {
     pub vars: HashMap<Var, Value>,
     macros: HashMap<Var, &'a Vec<Cmd>>,
     marks: HashMap<Var, slice::Iter<'a, Cmd>>,
+    rand_seed: rngs::ThreadRng,
+    rand_num: Value,
 }
 
 impl<'a> Vm<'a> {
     pub fn get_var(&mut self, var: &Var) -> &mut Value {
+        if *var == '?' {
+            self.rand_num = Value::Num(self.rand_seed.random::<u8>().into());
+            return &mut self.rand_num;
+        }
         self.vars.entry(var.clone())
             .or_default()
     }
