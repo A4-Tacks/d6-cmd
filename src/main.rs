@@ -25,7 +25,8 @@ fn main() {
         return;
     }
 
-    for path in matches.free {
+    let stdin_oatch = matches.free.is_empty().then_some("-".to_owned());
+    for path in matches.free.into_iter().chain(stdin_oatch) {
         let readed = if path == "-" {
             io::read_to_string(stdin().lock())
         } else {
