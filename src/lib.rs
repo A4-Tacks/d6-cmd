@@ -192,7 +192,7 @@ impl Value {
 pub struct Vm<'a> {
     count: Option<Value>,
     pub vars: HashMap<Var, Value>,
-    macros: HashMap<Var, &'a Vec<Cmd>>,
+    macros: HashMap<Var, &'a [Cmd]>,
     marks: HashMap<Var, slice::Iter<'a, Cmd>>,
     rand_seed: rngs::ThreadRng,
     rand_num: Value,
