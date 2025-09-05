@@ -68,7 +68,7 @@ pub enum Cmd {
 impl Cmd {
     pub fn preset_count(&self, count: Option<i64>) -> i64 {
         let default = match self {
-            Cmd::Stack(..) => 0,
+            Cmd::Stack(..) => -1,
             Cmd::Set(..) => 0,
             Cmd::Add(..) => 1,
             Cmd::Sub(..) => 1,
@@ -319,7 +319,8 @@ mod tests {
         check_run("2$a", value_map! { a: vec![0, 0] });
         check_run("2$a+a", value_map! { a: vec![0, 1] });
         check_run("2$a+a+a", value_map! { a: vec![0, 2] });
-        check_run("2$a+a$a", value_map! { a: vec![0, 1] });
+        check_run("2$a+a0$a", value_map! { a: vec![0, 1] });
+        check_run("2$a+a$a", value_map! { a: vec![0] });
         check_run("2$a+a=a", value_map! { a: vec![0, 0] });
         check_run("2$a+a-b%b$a", value_map! { a: vec![0], b: -1 });
         check_run("2$a+a1$a", value_map! { a: vec![0, 1, 0] });

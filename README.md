@@ -5,7 +5,7 @@ Supports value:
 - int 64-bit
 - int stack, only operation top int
 
-Supports cmd:
+Supports command:
 
 - <*num*> : set next cmd arg, times arg when setted arg
 - `%` <*var*> : using <*var*> value set next cmd arg
@@ -18,6 +18,12 @@ Supports cmd:
 - `[` <*cmds*> `]`: grouped cmds, `2[+a+b]` like `+a+b+a+b`
 - `*` <*var*> : define a mark
 - `^` <*var*> : jump to mark
+
+Command default repeat:
+
+- `+` `-` `[]` `{}` `@` `*` `^` : default repeat arg by `1`
+- `=` : default repeat arg by `0`
+- `$` : default repeat arg by `-1`
 
 Comment: `;` ...
 
@@ -45,7 +51,7 @@ $g ; new stack `g`
         %r=g ; g.top = r
         -p@f
         %g+r ; r += g.top
-        =d-d%d$g ; g.pop()
+        $g ; g.pop()
     ]
 }
 $h ; new stack `h`
